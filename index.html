@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=`">
@@ -7,11 +8,13 @@
     <link rel="shortcut icon" href="./logo.svg" type="image/x-icon">
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
         body {
             background: black;
             color: white;
-            font-family: Arial;
-            
+            font-family: "Nunito Sans", sans-serif;
+
             display: flex;
             justify-content: center;
             align-items: center;
@@ -24,9 +27,58 @@
             color: white;
             font-size: 3em;
         }
+
+        .changeBackgroundBtn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+        }
+
+        dialog {
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .btn-icon {
+            height: 30px;
+            width: 30px;
+
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
     </style>
 </head>
+
 <body>
+    <button onclick="changeBackground()" class="changeBackgroundBtn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-settings-icon lucide-settings">
+            <path
+                d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" />
+            <circle cx="12" cy="12" r="3" />
+        </svg>
+    </button>
+
     <a href="./games/drivemad.html">drive mad</a>
     <a href="./games/driveinrussia.html">drive in russia</a>
     <a href="./games/paperio.html">paper io</a>
@@ -35,6 +87,40 @@
     <a href="./games/granny.html">granny</a>
     <a href="./games/parkingfury.html">parking fury</a>
 
-    </a>
+    <dialog>
+        <h2>Change Background</h2>
+        <input type="file" name="upload" id="fileupload" accept="image/*">
+
+        <button onclick="this.closest('dialog').close()" class="btn-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+    </dialog>
+
+    <script>
+        if (localStorage.getItem('backgroundImage')) {
+            document.body.style.backgroundImage = `url(${localStorage.getItem('backgroundImage')})`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundRepeat = 'no-repeat';
+        }
+
+        function changeBackground() {
+            const dialog = document.querySelector('dialog')
+            dialog.showModal();
+
+            const fileInput = document.getElementById('fileupload');
+            fileInput.addEventListener('change', function () {
+                const file = fileInput.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.body.style.backgroundImage = `url(${e.target.result})`;
+                        localStorage.setItem('backgroundImage', e.target.result);
+                        document.body.style.backgroundSize = 'cover';
+                        document.body.style.backgroundPosition = 'center';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    </script>
 </body>
+
 </html>
